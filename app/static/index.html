@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LangChain + Hugging Face Chatbot</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <!-- Marked.js for markdown rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <i class="fa-solid fa-robot"></i>
+          <span>LangChain Bot</span>
+        </div>
+        <button id="new-chat-btn" class="btn btn-outline" title="Start New Conversation">
+          <i class="fa-solid fa-plus"></i> New Chat
+        </button>
+      </div>
+
+      <div class="sidebar-section">
+        <label for="session-select">Session ID</label>
+        <div class="session-input-wrapper">
+          <input type="text" id="session-id-input" value="default" placeholder="session-id" />
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <label>Status & Model</label>
+        <div class="status-card" id="status-card">
+          <div class="status-indicator">
+            <span class="dot" id="status-dot"></span>
+            <span id="status-text">Checking status...</span>
+          </div>
+          <div class="model-badge" id="model-badge">
+            <i class="fa-solid fa-cube"></i> <span id="model-name">Loading...</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <label for="system-prompt-input">System Prompt</label>
+        <textarea id="system-prompt-input" rows="3" placeholder="Optional system instruction for this session...">You are a helpful, friendly, and intelligent AI assistant.</textarea>
+      </div>
+
+      <div class="sidebar-section chat-history-section">
+        <label>Recent Conversations</label>
+        <div class="sessions-list" id="sessions-list">
+          <div class="no-sessions">No previous chats yet</div>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <a href="/docs" target="_blank" class="sidebar-link">
+          <i class="fa-solid fa-book-open"></i> Swagger API Docs
+        </a>
+        <button id="clear-chat-btn" class="sidebar-link danger-link">
+          <i class="fa-solid fa-trash"></i> Reset Memory
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Chat Window -->
+    <main class="chat-main">
+      <header class="chat-header">
+        <button class="mobile-toggle" id="sidebar-toggle">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <div class="chat-title">
+          <h2>LangChain AI Assistant</h2>
+          <span class="subtext">Powered by FastAPI &amp; Local Ollama Models</span>
+        </div>
+        <div class="header-actions">
+          <label class="toggle-switch" title="Search the live web before answering for real-time accurate information">
+            <input type="checkbox" id="web-search-toggle" checked />
+            <span class="slider"></span>
+            <span class="toggle-label"><i class="fa-solid fa-globe"></i> Web Search</span>
+          </label>
+          <label class="toggle-switch" title="Toggle Real-Time Streaming">
+            <input type="checkbox" id="stream-toggle" checked />
+            <span class="slider"></span>
+            <span class="toggle-label">Streaming</span>
+          </label>
+        </div>
+      </header>
+
+      <!-- Message History Container -->
+      <section class="messages-container" id="messages-container">
+        <!-- Welcome Card -->
+        <div class="welcome-box" id="welcome-box">
+          <div class="bot-avatar-large">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+          </div>
+          <h3>Welcome to your LangChain AI Assistant!</h3>
+          <p>This chatbot runs on <strong>FastAPI</strong> with <strong>LangChain</strong> orchestration and connects directly to <strong>Local Ollama models</strong> (100% private, free, no API keys needed).</p>
+          
+          <div class="prompt-chips">
+            <button class="chip" data-prompt="Explain how LangChain and FastAPI work together in this app.">
+              <i class="fa-regular fa-lightbulb"></i> How this app works
+            </button>
+            <button class="chip" data-prompt="Write a Python script to scrape a website using BeautifulSoup.">
+              <i class="fa-solid fa-code"></i> Python scraping script
+            </button>
+            <button class="chip" data-prompt="What are the top 3 best practices for deploying FastAPI apps?">
+              <i class="fa-solid fa-rocket"></i> FastAPI best practices
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Input Bar -->
+      <footer class="chat-input-area">
+        <form id="chat-form" class="input-form">
+          <textarea
+            id="chat-input"
+            rows="1"
+            placeholder="Type your message here... (Press Enter to send, Shift+Enter for new line)"
+            required
+          ></textarea>
+          <button type="submit" id="send-btn" class="send-btn" title="Send Message">
+            <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </form>
+        <div class="input-footer-note">
+          Model responses may take 5-15s if the free Hugging Face container is warming up.
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
